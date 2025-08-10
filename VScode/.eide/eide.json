@@ -189,6 +189,9 @@
           },
           {
             "path": "../User/stm32f10x_it.cpp"
+          },
+          {
+            "path": "../User/main.h"
           }
         ],
         "folders": []
@@ -249,6 +252,18 @@
           },
           {
             "path": "../Hardware/Delay.cpp"
+          },
+          {
+            "path": "../Hardware/pwm_tim1.h"
+          },
+          {
+            "path": "../Hardware/pwm_tim1.cpp"
+          },
+          {
+            "path": "../Hardware/encoder.cpp"
+          },
+          {
+            "path": "../Hardware/encoder.h"
           }
         ],
         "folders": []

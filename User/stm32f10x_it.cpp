@@ -24,10 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 
-#include "Delay.h"
-#include "tim.h"
-#include "MatrixKeyboard.h"
-#include "tim4.h"
+#include "main.h"
 
 
 /** @addtogroup STM32F10x_StdPeriph_Template
@@ -217,5 +214,33 @@ void TIM4_IRQHandler(void)
   TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 }
 
+void EXTI15_10_IRQHandler(void)
+{
+    // 检查是不是Line12触发了中断
+    if(EXTI_GetITStatus(EXTI_Line12) != RESET)
+    {
+        // 编码器解码逻辑
+        if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13) == 0)
+        {
+            Encoder_Count--;
+        }
+        else
+        {
+            Encoder_Count++;
+        }
 
+        // 【关键】在处理完之后，立刻清除Line12的中断标志位！
+        
+    }
+    EXTI_ClearITPendingBit(EXTI_Line12); 
 
+    // 【安全保护】检查是不是Line13也可能触发中断
+    // 即使我们只打算用Line12，这个检查也能保证程序的健壮性
+    if(EXTI_GetITStatus(EXTI_Line13) != RESET)
+    {
+        // 如果Line13也意外触发了，我们不进行计数，但必须清除它的标志位
+        // 否则程序会因为这个未清除的标志位而卡死在这里
+        
+    }
+    EXTI_ClearITPendingBit(EXTI_Line13);
+}

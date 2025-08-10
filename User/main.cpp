@@ -1,11 +1,4 @@
-#include "led.h"
-#include "Delay.h"
-#include "tim.h"
-#include "MatrixKeyboard.h"
-#include "tim4.h"
-#include "LightSensor.h"
-#include "oled.h"
-
+#include "main.h"
 
 int main(void) {
     LED led1(GPIOB, GPIO_Pin_0);
@@ -33,10 +26,16 @@ int main(void) {
 
     I2C_Configuration();
     OLED_Init();
+    Encoder_Init();
     // OLED_NewFrame();
     // OLED_ShowFrame();
     OLED_PrintString(0, 0, (char *)"Hello World!", &font16x16, OLED_COLOR_NORMAL);
     OLED_ShowFrame();
+
+    
+
+    int16_t count = 0;
+
 
     while (1) {
         if(g_KeyCode != 0xFF)
@@ -65,11 +64,21 @@ int main(void) {
         if(lightState == 0)
         {
             led2.on();
+            OLED_PrintString(1, 16, (char *)"Light: ON ", &font16x16, OLED_COLOR_NORMAL);
+            OLED_ShowFrame();
         }
         else
         {
             led2.off();
+            OLED_PrintString(1, 16, (char *)"Light: OFF", &font16x16, OLED_COLOR_NORMAL);
+            OLED_ShowFrame();
         }
+
+        count += Encoder_GetCount();
+        char count_str[20];
+        sprintf(count_str, "Count: %5d", count);
+        OLED_PrintString(0, 33, count_str, &font16x16, OLED_COLOR_NORMAL);
+        OLED_ShowFrame();
 
 
     }
