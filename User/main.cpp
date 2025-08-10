@@ -27,6 +27,8 @@ int main(void) {
     I2C_Configuration();
     OLED_Init();
     Encoder_Init();
+    TIM1_CH4_PWM_Init(1000-1, 72-1);
+
     // OLED_NewFrame();
     // OLED_ShowFrame();
     OLED_PrintString(0, 0, (char *)"Hello World!", &font16x16, OLED_COLOR_NORMAL);
@@ -75,6 +77,16 @@ int main(void) {
         }
 
         count += Encoder_GetCount();
+        TIM_SetCompare4(TIM1, count);
+        if(count > 1000)
+        {
+            count = 0;
+        }
+        else if(count < 0)
+        {
+            count = 1000;
+        }
+
         char count_str[20];
         sprintf(count_str, "Count: %5d", count);
         OLED_PrintString(0, 33, count_str, &font16x16, OLED_COLOR_NORMAL);

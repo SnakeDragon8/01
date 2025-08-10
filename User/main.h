@@ -10,5 +10,6 @@
 #include "oled.h"
 #include "encoder.h"
 #include <stdio.h>
+#include "pwm_tim1.h"
 
 #endif
